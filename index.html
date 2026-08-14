@@ -1,0 +1,2626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Credit Default Risk Predictor
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        body {
+
+            background: #f3f4f6;
+
+            color: #111827;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        header {
+
+            background: #111827;
+
+            color: white;
+
+            padding: 24px 50px;
+
+        }
+
+
+        header h1 {
+
+            font-size: 26px;
+
+        }
+
+
+        header p {
+
+            margin-top: 5px;
+
+            color: #9ca3af;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .container {
+
+            max-width: 1250px;
+
+            margin: 35px auto;
+
+            padding: 0 20px;
+
+        }
+
+
+        .intro {
+
+            margin-bottom: 28px;
+
+        }
+
+
+        .intro h2 {
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .intro p {
+
+            color: #6b7280;
+
+        }
+
+
+        .layout {
+
+            display: grid;
+
+            grid-template-columns:
+                2fr 1fr;
+
+            gap: 25px;
+
+            align-items: start;
+
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+
+            background: white;
+
+            padding: 26px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0, 0, 0, 0.06);
+
+        }
+
+
+        .card h3 {
+
+            margin-bottom: 20px;
+
+            font-size: 20px;
+
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+
+        }
+
+
+        .field {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        .field label {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+            color: #374151;
+
+        }
+
+
+        .field small {
+
+            margin-top: 5px;
+
+            color: #9ca3af;
+
+            font-size: 11px;
+
+        }
+
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            background: white;
+
+            color: #111827;
+
+        }
+
+
+        input:focus,
+        select:focus {
+
+            outline: none;
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 2px
+                rgba(37, 99, 235, 0.1);
+
+        }
+
+
+        /* =====================================================
+           SECTION TITLES
+        ===================================================== */
+
+        .section-title {
+
+            grid-column: span 2;
+
+            margin-top: 18px;
+
+            padding-bottom: 9px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            color: #111827;
+
+        }
+
+
+        .section-description {
+
+            grid-column: span 2;
+
+            margin-top: -8px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        button {
+
+            width: 100%;
+
+            margin-top: 28px;
+
+            padding: 14px;
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+        button:hover {
+
+            background: #1d4ed8;
+
+        }
+
+
+        button:disabled {
+
+            background: #9ca3af;
+
+            cursor: not-allowed;
+
+        }
+
+
+        /* =====================================================
+           RESULT
+        ===================================================== */
+
+        .result {
+
+            text-align: center;
+
+            padding: 30px 18px;
+
+            background: #f9fafb;
+
+            border-radius: 12px;
+
+        }
+
+
+        #icon {
+
+            font-size: 48px;
+
+            margin-bottom: 12px;
+
+        }
+
+
+        #risk {
+
+            font-size: 23px;
+
+            font-weight: bold;
+
+        }
+
+
+        #probability {
+
+            font-size: 42px;
+
+            font-weight: bold;
+
+            margin: 15px 0;
+
+        }
+
+
+        #message {
+
+            color: #6b7280;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+
+        }
+
+
+        .high {
+
+            color: #dc2626;
+
+        }
+
+
+        .low {
+
+            color: #16a34a;
+
+        }
+
+
+        /* =====================================================
+           PROBABILITY BAR
+        ===================================================== */
+
+        .progress {
+
+            margin-top: 25px;
+
+        }
+
+
+        .progress-header {
+
+            display: flex;
+
+            justify-content:
+                space-between;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+        }
+
+
+        .progress-background {
+
+            height: 12px;
+
+            background: #e5e7eb;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+        }
+
+
+        #progress-bar {
+
+            height: 100%;
+
+            width: 0%;
+
+            background: #dc2626;
+
+            transition:
+                width 0.5s ease;
+
+        }
+
+
+        /* =====================================================
+           XAI
+        ===================================================== */
+
+        .xai-section {
+
+            margin-top: 30px;
+
+        }
+
+
+        .xai-section h3 {
+
+            margin-bottom: 7px;
+
+        }
+
+
+        .xai-description {
+
+            font-size: 13px;
+
+            color: #6b7280;
+
+            line-height: 1.6;
+
+            margin-bottom: 16px;
+
+        }
+
+
+        .xai-summary {
+
+            background: #f9fafb;
+
+            border-radius: 10px;
+
+            padding: 15px;
+
+            margin-bottom: 16px;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            color: #374151;
+
+        }
+
+
+        .xai-factor {
+
+            padding: 15px;
+
+            margin-bottom: 10px;
+
+            border-radius: 9px;
+
+            background: #f9fafb;
+
+            border-left: 4px solid #9ca3af;
+
+        }
+
+
+        .xai-factor.increase {
+
+            border-left-color: #dc2626;
+
+        }
+
+
+        .xai-factor.decrease {
+
+            border-left-color: #16a34a;
+
+        }
+
+
+        .xai-feature {
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            color: #111827;
+
+        }
+
+
+        .xai-impact {
+
+            font-size: 13px;
+
+            margin-top: 4px;
+
+            color: #374151;
+
+        }
+
+
+        .xai-value {
+
+            font-size: 12px;
+
+            color: #6b7280;
+
+            margin-top: 6px;
+
+        }
+
+
+        .empty-xai {
+
+            color: #9ca3af;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =====================================================
+           NOTE
+        ===================================================== */
+
+        .note {
+
+            margin-top: 25px;
+
+            padding: 15px;
+
+            background: #eff6ff;
+
+            border-radius: 8px;
+
+            color: #1e40af;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+
+        }
+
+
+        /* =====================================================
+           LOADING
+        ===================================================== */
+
+        .loading {
+
+            opacity: 0.7;
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 900px) {
+
+            .layout {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .section-title,
+            .section-description {
+
+                grid-column: span 1;
+
+            }
+
+
+            header {
+
+                padding: 20px;
+
+            }
+
+
+            .container {
+
+                margin-top: 25px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+    <h1>
+        Credit Default Risk Predictor
+    </h1>
+
+    <p>
+        Explainable Machine Learning • XGBoost
+    </p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- =====================================================
+         INTRODUCTION
+    ====================================================== -->
+
+    <div class="intro">
+
+        <h2>
+            Credit Card Default Prediction
+        </h2>
+
+        <p>
+            Enter customer information to estimate
+            the likelihood of credit card default.
+        </p>
+
+    </div>
+
+
+    <div class="layout">
+
+
+        <!-- =================================================
+             INPUT FORM
+        ================================================== -->
+
+        <div class="card">
+
+            <h3>
+                Customer Information
+            </h3>
+
+
+            <form id="prediction-form">
+
+
+                <div class="form-grid">
+
+
+                    <!-- =====================================
+                         PERSONAL INFORMATION
+                    ====================================== -->
+
+                    <div class="section-title">
+                        Personal Information
+                    </div>
+
+
+                    <div class="section-description">
+                        Basic information about the customer.
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Credit Limit
+                        </label>
+
+                        <input
+                            type="number"
+                            id="LIMIT_BAL"
+                            value="50000"
+                            min="0"
+                            required
+                        >
+
+                        <small>
+                            Approved credit limit
+                        </small>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Age
+                        </label>
+
+                        <input
+                            type="number"
+                            id="AGE"
+                            value="30"
+                            min="18"
+                            max="100"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Sex
+                        </label>
+
+                        <select id="SEX">
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option
+                                value="Female"
+                                selected
+                            >
+                                Female
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Education
+                        </label>
+
+                        <select id="EDUCATION">
+
+                            <option value="Graduate School">
+                                Graduate School
+                            </option>
+
+                            <option
+                                value="University"
+                                selected
+                            >
+                                University
+                            </option>
+
+                            <option value="High School">
+                                High School
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Marriage Status
+                        </label>
+
+                        <select id="MARRIAGE">
+
+                            <option
+                                value="Married"
+                                selected
+                            >
+                                Married
+                            </option>
+
+                            <option value="Single">
+                                Single
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         REPAYMENT HISTORY
+                    ====================================== -->
+
+                    <div class="section-title">
+
+                        Repayment History
+
+                    </div>
+
+
+                    <div class="section-description">
+
+                        Select the customer's repayment status
+                        for each month. This describes whether
+                        payments were made on time or delayed.
+
+                    </div>
+
+
+                    <!-- PAY 0 -->
+
+                    <div class="field">
+
+                        <label>
+                            Most Recent Repayment Status
+                        </label>
+
+                        <select id="PAY_0">
+
+                            <option value="-2">
+                                No consumption
+                            </option>
+
+                            <option value="-1">
+                                Paid on time
+                            </option>
+
+                            <option
+                                value="0"
+                                selected
+                            >
+                                No payment delay
+                            </option>
+
+                            <option value="1">
+                                1 month delayed
+                            </option>
+
+                            <option value="2">
+                                2 months delayed
+                            </option>
+
+                            <option value="3">
+                                3 months delayed
+                            </option>
+
+                            <option value="4">
+                                4 months delayed
+                            </option>
+
+                            <option value="5">
+                                5 months delayed
+                            </option>
+
+                            <option value="6">
+                                6 months delayed
+                            </option>
+
+                            <option value="7">
+                                7 months delayed
+                            </option>
+
+                            <option value="8">
+                                8 months delayed
+                            </option>
+
+                            <option value="9">
+                                9+ months delayed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PAY 2 -->
+
+                    <div class="field">
+
+                        <label>
+                            Repayment Status — 2 Months Ago
+                        </label>
+
+                        <select id="PAY_2">
+
+                            <option value="-2">
+                                No consumption
+                            </option>
+
+                            <option value="-1">
+                                Paid on time
+                            </option>
+
+                            <option
+                                value="0"
+                                selected
+                            >
+                                No payment delay
+                            </option>
+
+                            <option value="1">
+                                1 month delayed
+                            </option>
+
+                            <option value="2">
+                                2 months delayed
+                            </option>
+
+                            <option value="3">
+                                3 months delayed
+                            </option>
+
+                            <option value="4">
+                                4 months delayed
+                            </option>
+
+                            <option value="5">
+                                5 months delayed
+                            </option>
+
+                            <option value="6">
+                                6 months delayed
+                            </option>
+
+                            <option value="7">
+                                7 months delayed
+                            </option>
+
+                            <option value="8">
+                                8 months delayed
+                            </option>
+
+                            <option value="9">
+                                9+ months delayed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PAY 3 -->
+
+                    <div class="field">
+
+                        <label>
+                            Repayment Status — 3 Months Ago
+                        </label>
+
+                        <select id="PAY_3">
+
+                            <option value="-2">
+                                No consumption
+                            </option>
+
+                            <option value="-1">
+                                Paid on time
+                            </option>
+
+                            <option
+                                value="0"
+                                selected
+                            >
+                                No payment delay
+                            </option>
+
+                            <option value="1">
+                                1 month delayed
+                            </option>
+
+                            <option value="2">
+                                2 months delayed
+                            </option>
+
+                            <option value="3">
+                                3 months delayed
+                            </option>
+
+                            <option value="4">
+                                4 months delayed
+                            </option>
+
+                            <option value="5">
+                                5 months delayed
+                            </option>
+
+                            <option value="6">
+                                6 months delayed
+                            </option>
+
+                            <option value="7">
+                                7 months delayed
+                            </option>
+
+                            <option value="8">
+                                8 months delayed
+                            </option>
+
+                            <option value="9">
+                                9+ months delayed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PAY 4 -->
+
+                    <div class="field">
+
+                        <label>
+                            Repayment Status — 4 Months Ago
+                        </label>
+
+                        <select id="PAY_4">
+
+                            <option value="-2">
+                                No consumption
+                            </option>
+
+                            <option value="-1">
+                                Paid on time
+                            </option>
+
+                            <option
+                                value="0"
+                                selected
+                            >
+                                No payment delay
+                            </option>
+
+                            <option value="1">
+                                1 month delayed
+                            </option>
+
+                            <option value="2">
+                                2 months delayed
+                            </option>
+
+                            <option value="3">
+                                3 months delayed
+                            </option>
+
+                            <option value="4">
+                                4 months delayed
+                            </option>
+
+                            <option value="5">
+                                5 months delayed
+                            </option>
+
+                            <option value="6">
+                                6 months delayed
+                            </option>
+
+                            <option value="7">
+                                7 months delayed
+                            </option>
+
+                            <option value="8">
+                                8 months delayed
+                            </option>
+
+                            <option value="9">
+                                9+ months delayed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PAY 5 -->
+
+                    <div class="field">
+
+                        <label>
+                            Repayment Status — 5 Months Ago
+                        </label>
+
+                        <select id="PAY_5">
+
+                            <option value="-2">
+                                No consumption
+                            </option>
+
+                            <option value="-1">
+                                Paid on time
+                            </option>
+
+                            <option
+                                value="0"
+                                selected
+                            >
+                                No payment delay
+                            </option>
+
+                            <option value="1">
+                                1 month delayed
+                            </option>
+
+                            <option value="2">
+                                2 months delayed
+                            </option>
+
+                            <option value="3">
+                                3 months delayed
+                            </option>
+
+                            <option value="4">
+                                4 months delayed
+                            </option>
+
+                            <option value="5">
+                                5 months delayed
+                            </option>
+
+                            <option value="6">
+                                6 months delayed
+                            </option>
+
+                            <option value="7">
+                                7 months delayed
+                            </option>
+
+                            <option value="8">
+                                8 months delayed
+                            </option>
+
+                            <option value="9">
+                                9+ months delayed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PAY 6 -->
+
+                    <div class="field">
+
+                        <label>
+                            Repayment Status — 6 Months Ago
+                        </label>
+
+                        <select id="PAY_6">
+
+                            <option value="-2">
+                                No consumption
+                            </option>
+
+                            <option value="-1">
+                                Paid on time
+                            </option>
+
+                            <option
+                                value="0"
+                                selected
+                            >
+                                No payment delay
+                            </option>
+
+                            <option value="1">
+                                1 month delayed
+                            </option>
+
+                            <option value="2">
+                                2 months delayed
+                            </option>
+
+                            <option value="3">
+                                3 months delayed
+                            </option>
+
+                            <option value="4">
+                                4 months delayed
+                            </option>
+
+                            <option value="5">
+                                5 months delayed
+                            </option>
+
+                            <option value="6">
+                                6 months delayed
+                            </option>
+
+                            <option value="7">
+                                7 months delayed
+                            </option>
+
+                            <option value="8">
+                                8 months delayed
+                            </option>
+
+                            <option value="9">
+                                9+ months delayed
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         BILL HISTORY
+                    ====================================== -->
+
+                    <div class="section-title">
+
+                        Bill History
+
+                    </div>
+
+
+                    <div class="section-description">
+
+                        Enter the customer's billed amount
+                        for each of the last six months.
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Most Recent Bill Amount
+                        </label>
+
+                        <input
+                            type="number"
+                            id="BILL_AMT1"
+                            value="5000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Bill Amount — 2 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="BILL_AMT2"
+                            value="5000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Bill Amount — 3 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="BILL_AMT3"
+                            value="5000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Bill Amount — 4 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="BILL_AMT4"
+                            value="5000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Bill Amount — 5 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="BILL_AMT5"
+                            value="5000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Bill Amount — 6 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="BILL_AMT6"
+                            value="5000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <!-- =====================================
+                         PAYMENT HISTORY
+                    ====================================== -->
+
+                    <div class="section-title">
+
+                        Payment History
+
+                    </div>
+
+
+                    <div class="section-description">
+
+                        Enter the amount the customer actually
+                        paid during each of the last six months.
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Most Recent Payment Amount
+                        </label>
+
+                        <input
+                            type="number"
+                            id="PAY_AMT1"
+                            value="1000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Payment Amount — 2 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="PAY_AMT2"
+                            value="1000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Payment Amount — 3 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="PAY_AMT3"
+                            value="1000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Payment Amount — 4 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="PAY_AMT4"
+                            value="1000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Payment Amount — 5 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="PAY_AMT5"
+                            value="1000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Payment Amount — 6 Months Ago
+                        </label>
+
+                        <input
+                            type="number"
+                            id="PAY_AMT6"
+                            value="1000"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =========================================
+                     PREDICT BUTTON
+                ========================================== -->
+
+                <button
+                    type="submit"
+                    id="predict-button"
+                >
+                    Predict Default Risk
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- =================================================
+             RESULT PANEL
+        ================================================== -->
+
+        <div class="card">
+
+            <h3>
+                Prediction Result
+            </h3>
+
+
+            <div class="result">
+
+                <div id="icon">
+                    🔍
+                </div>
+
+
+                <div id="risk">
+                    Waiting for Prediction
+                </div>
+
+
+                <div id="probability">
+                    --
+                </div>
+
+
+                <div id="message">
+
+                    Enter customer information
+                    and click the prediction button.
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 PROBABILITY
+            ============================================== -->
+
+            <div class="progress">
+
+                <div class="progress-header">
+
+                    <span>
+                        Estimated Default Probability
+                    </span>
+
+                    <span id="probability-label">
+                        0%
+                    </span>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div id="progress-bar"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 XAI
+            ============================================== -->
+
+            <div class="xai-section">
+
+                <h3>
+                    Why was this result predicted?
+                </h3>
+
+
+                <p class="xai-description">
+
+                    The model considers the customer's
+                    repayment history, bills, payments,
+                    credit limit, and other information.
+                    The factors below had the strongest
+                    influence on this particular prediction.
+
+                </p>
+
+
+                <div
+                    id="xai-summary"
+                    class="xai-summary"
+                    style="display:none;"
+                >
+                </div>
+
+
+                <div id="xai-factors">
+
+                    <p class="empty-xai">
+
+                        The main factors influencing the
+                        prediction will appear here.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 DISCLAIMER
+            ============================================== -->
+
+            <div class="note">
+
+                <strong>
+                    Important:
+                </strong>
+
+                This result is generated by a trained
+                machine learning model. The probability
+                is an estimate and should not be treated
+                as a guarantee of future customer behavior.
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+// ============================================================
+// HELPER
+// ============================================================
+
+function value(id) {
+
+    return document
+        .getElementById(id)
+        .value;
+
+}
+
+
+// ============================================================
+// REPAYMENT DESCRIPTION
+// ============================================================
+
+function repaymentDescription(value) {
+
+    const descriptions = {
+
+        "-2":
+            "No consumption",
+
+        "-1":
+            "Paid on time",
+
+        "0":
+            "No payment delay",
+
+        "1":
+            "1 month delayed",
+
+        "2":
+            "2 months delayed",
+
+        "3":
+            "3 months delayed",
+
+        "4":
+            "4 months delayed",
+
+        "5":
+            "5 months delayed",
+
+        "6":
+            "6 months delayed",
+
+        "7":
+            "7 months delayed",
+
+        "8":
+            "8 months delayed",
+
+        "9":
+            "9+ months delayed"
+
+    };
+
+    return descriptions[value] || value;
+
+}
+
+
+// ============================================================
+// HUMAN-FRIENDLY XAI FEATURE NAME
+// ============================================================
+
+function friendlyFeatureName(feature) {
+
+    const names = {
+
+        "Credit Limit":
+            "Credit limit",
+
+        "Sex":
+            "Personal information",
+
+        "Education":
+            "Education background",
+
+        "Marriage Status":
+            "Marriage status",
+
+        "Age":
+            "Age",
+
+        "Repayment Status - Latest Month":
+            "Recent repayment behavior",
+
+        "Repayment Status - 2 Months Ago":
+            "Repayment behavior from 2 months ago",
+
+        "Repayment Status - 3 Months Ago":
+            "Repayment behavior from 3 months ago",
+
+        "Repayment Status - 4 Months Ago":
+            "Repayment behavior from 4 months ago",
+
+        "Repayment Status - 5 Months Ago":
+            "Repayment behavior from 5 months ago",
+
+        "Repayment Status - 6 Months Ago":
+            "Repayment behavior from 6 months ago",
+
+        "Bill Amount - Latest Month":
+            "Recent bill amount",
+
+        "Bill Amount - 2 Months Ago":
+            "Bill amount from 2 months ago",
+
+        "Bill Amount - 3 Months Ago":
+            "Bill amount from 3 months ago",
+
+        "Bill Amount - 4 Months Ago":
+            "Bill amount from 4 months ago",
+
+        "Bill Amount - 5 Months Ago":
+            "Bill amount from 5 months ago",
+
+        "Bill Amount - 6 Months Ago":
+            "Bill amount from 6 months ago",
+
+        "Payment Amount - Latest Month":
+            "Recent payment activity",
+
+        "Payment Amount - 2 Months Ago":
+            "Payment activity from 2 months ago",
+
+        "Payment Amount - 3 Months Ago":
+            "Payment activity from 3 months ago",
+
+        "Payment Amount - 4 Months Ago":
+            "Payment activity from 4 months ago",
+
+        "Payment Amount - 5 Months Ago":
+            "Payment activity from 5 months ago",
+
+        "Payment Amount - 6 Months Ago":
+            "Payment activity from 6 months ago"
+
+    };
+
+    return names[feature] || feature;
+
+}
+
+
+// ============================================================
+// CREATE USER-FRIENDLY XAI MESSAGE
+// ============================================================
+
+function createExplanation(factor, prediction) {
+
+    const feature =
+        friendlyFeatureName(
+            factor.feature
+        );
+
+
+    const direction =
+        factor.direction;
+
+
+    const value =
+        factor.value;
+
+
+    // --------------------------------------------------------
+    // Repayment factors
+    // --------------------------------------------------------
+
+    if (
+        factor.feature.includes(
+            "Repayment Status"
+        )
+    ) {
+
+        const repayment =
+            repaymentDescription(
+                String(value)
+            );
+
+
+        if (direction === "increases risk") {
+
+            return {
+
+                title:
+                    feature + " is a concern",
+
+                message:
+                    "The customer's repayment history shows " +
+                    repayment.toLowerCase() +
+                    ". This is contributing to a higher estimated default risk."
+
+            };
+
+        }
+
+
+        return {
+
+            title:
+                feature + " is helping",
+
+            message:
+                "The customer's repayment history is " +
+                repayment.toLowerCase() +
+                ". This is contributing positively to the assessment."
+
+        };
+
+    }
+
+
+    // --------------------------------------------------------
+    // Payment factors
+    // --------------------------------------------------------
+
+    if (
+        factor.feature.includes(
+            "Payment Amount"
+        )
+    ) {
+
+        const formattedValue =
+            Number(value).toLocaleString();
+
+
+        if (direction === "increases risk") {
+
+            return {
+
+                title:
+                    feature + " is a concern",
+
+                message:
+                    "The recorded payment amount is " +
+                    formattedValue +
+                    ". This factor is contributing to a higher estimated risk."
+
+            };
+
+        }
+
+
+        return {
+
+            title:
+                feature + " is helping",
+
+            message:
+                "The recorded payment amount is " +
+                formattedValue +
+                ". This factor is contributing positively to the assessment."
+
+        };
+
+    }
+
+
+    // --------------------------------------------------------
+    // Bill factors
+    // --------------------------------------------------------
+
+    if (
+        factor.feature.includes(
+            "Bill Amount"
+        )
+    ) {
+
+        const formattedValue =
+            Number(value).toLocaleString();
+
+
+        if (direction === "increases risk") {
+
+            return {
+
+                title:
+                    feature + " is a concern",
+
+                message:
+                    "The recorded bill amount is " +
+                    formattedValue +
+                    ". This factor is contributing to a higher estimated risk."
+
+            };
+
+        }
+
+
+        return {
+
+            title:
+                feature + " is helping",
+
+            message:
+                "The recorded bill amount is " +
+                formattedValue +
+                ". This factor is contributing positively to the assessment."
+
+            };
+
+    }
+
+
+    // --------------------------------------------------------
+    // Credit limit
+    // --------------------------------------------------------
+
+    if (
+        factor.feature ===
+        "Credit Limit"
+    ) {
+
+        const formattedValue =
+            Number(value).toLocaleString();
+
+
+        if (direction === "increases risk") {
+
+            return {
+
+                title:
+                    "Credit limit is influencing the result",
+
+                message:
+                    "The customer's credit limit is " +
+                    formattedValue +
+                    ". This factor is contributing to the estimated risk."
+
+            };
+
+        }
+
+
+        return {
+
+            title:
+                "Credit limit is a positive factor",
+
+            message:
+                "The customer's credit limit is " +
+                formattedValue +
+                ". This factor is helping reduce the estimated risk."
+
+        };
+
+    }
+
+
+    // --------------------------------------------------------
+    // Other factors
+    // --------------------------------------------------------
+
+    if (direction === "increases risk") {
+
+        return {
+
+            title:
+                feature + " is influencing the risk",
+
+            message:
+                "This customer information is contributing " +
+                "to a higher estimated default risk."
+
+        };
+
+    }
+
+
+    return {
+
+        title:
+            feature + " is helping",
+
+        message:
+            "This customer information is contributing " +
+            "positively to the assessment."
+
+    };
+
+}
+
+
+// ============================================================
+// CREATE OVERALL XAI SUMMARY
+// ============================================================
+
+function createOverallSummary(
+    factors,
+    prediction
+) {
+
+    const riskIncreasing =
+        factors.filter(
+            factor =>
+                factor.direction ===
+                "increases risk"
+        );
+
+
+    const riskDecreasing =
+        factors.filter(
+            factor =>
+                factor.direction ===
+                "decreases risk"
+        );
+
+
+    if (prediction === 1) {
+
+        if (riskIncreasing.length > 0) {
+
+            const names =
+                riskIncreasing
+                    .slice(0, 2)
+                    .map(
+                        factor =>
+                            friendlyFeatureName(
+                                factor.feature
+                            )
+                    )
+                    .join(" and ");
+
+
+            return (
+                "The main factors contributing to " +
+                "the higher risk assessment are " +
+                names +
+                "."
+            );
+
+        }
+
+
+        return (
+            "The model identified several customer " +
+            "characteristics that together resulted " +
+            "in a higher risk assessment."
+        );
+
+    }
+
+
+    if (riskDecreasing.length > 0) {
+
+        const names =
+            riskDecreasing
+                .slice(0, 2)
+                .map(
+                    factor =>
+                        friendlyFeatureName(
+                            factor.feature
+                        )
+                )
+                .join(" and ");
+
+
+        return (
+            "The main factors supporting the lower " +
+            "risk assessment are " +
+            names +
+            "."
+        );
+
+    }
+
+
+    return (
+        "The model considered several customer " +
+        "characteristics together when making " +
+        "this assessment."
+    );
+
+}
+
+
+// ============================================================
+// FORM SUBMISSION
+// ============================================================
+
+document
+    .getElementById("prediction-form")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const button =
+                document.getElementById(
+                    "predict-button"
+                );
+
+
+            button.disabled = true;
+
+            button.innerText =
+                "Predicting...";
+
+
+            button.classList.add(
+                "loading"
+            );
+
+
+            // =================================================
+            // COLLECT ALL 23 FEATURES
+            // =================================================
+
+            const data = {
+
+                LIMIT_BAL:
+                    Number(
+                        value("LIMIT_BAL")
+                    ),
+
+                AGE:
+                    Number(
+                        value("AGE")
+                    ),
+
+                SEX:
+                    value("SEX"),
+
+                EDUCATION:
+                    value("EDUCATION"),
+
+                MARRIAGE:
+                    value("MARRIAGE"),
+
+
+                PAY_0:
+                    Number(
+                        value("PAY_0")
+                    ),
+
+                PAY_2:
+                    Number(
+                        value("PAY_2")
+                    ),
+
+                PAY_3:
+                    Number(
+                        value("PAY_3")
+                    ),
+
+                PAY_4:
+                    Number(
+                        value("PAY_4")
+                    ),
+
+                PAY_5:
+                    Number(
+                        value("PAY_5")
+                    ),
+
+                PAY_6:
+                    Number(
+                        value("PAY_6")
+                    ),
+
+
+                BILL_AMT1:
+                    Number(
+                        value("BILL_AMT1")
+                    ),
+
+                BILL_AMT2:
+                    Number(
+                        value("BILL_AMT2")
+                    ),
+
+                BILL_AMT3:
+                    Number(
+                        value("BILL_AMT3")
+                    ),
+
+                BILL_AMT4:
+                    Number(
+                        value("BILL_AMT4")
+                    ),
+
+                BILL_AMT5:
+                    Number(
+                        value("BILL_AMT5")
+                    ),
+
+                BILL_AMT6:
+                    Number(
+                        value("BILL_AMT6")
+                    ),
+
+
+                PAY_AMT1:
+                    Number(
+                        value("PAY_AMT1")
+                    ),
+
+                PAY_AMT2:
+                    Number(
+                        value("PAY_AMT2")
+                    ),
+
+                PAY_AMT3:
+                    Number(
+                        value("PAY_AMT3")
+                    ),
+
+                PAY_AMT4:
+                    Number(
+                        value("PAY_AMT4")
+                    ),
+
+                PAY_AMT5:
+                    Number(
+                        value("PAY_AMT5")
+                    ),
+
+                PAY_AMT6:
+                    Number(
+                        value("PAY_AMT6")
+                    )
+
+            };
+
+
+            try {
+
+
+                // =============================================
+                // SEND TO REAL FLASK MODEL
+                // =============================================
+
+                const response =
+                    await fetch(
+                        "/predict",
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    data
+                                )
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (!response.ok ||
+                    !result.success) {
+
+                    throw new Error(
+                        result.error ||
+                        "Prediction failed."
+                    );
+
+                }
+
+
+                // =============================================
+                // REAL MODEL RESULT
+                // =============================================
+
+                const probability =
+                    result.probability;
+
+
+                const prediction =
+                    result.prediction;
+
+
+                // =============================================
+                // DISPLAY PROBABILITY
+                // =============================================
+
+                document
+                    .getElementById(
+                        "probability"
+                    )
+                    .innerText =
+                    probability + "%";
+
+
+                document
+                    .getElementById(
+                        "probability-label"
+                    )
+                    .innerText =
+                    probability + "%";
+
+
+                document
+                    .getElementById(
+                        "progress-bar"
+                    )
+                    .style.width =
+                    probability + "%";
+
+
+                // =============================================
+                // RESULT ELEMENTS
+                // =============================================
+
+                const risk =
+                    document.getElementById(
+                        "risk"
+                    );
+
+
+                const icon =
+                    document.getElementById(
+                        "icon"
+                    );
+
+
+                const message =
+                    document.getElementById(
+                        "message"
+                    );
+
+
+                // =============================================
+                // HIGH RISK
+                // =============================================
+
+                if (prediction === 1) {
+
+                    risk.innerText =
+                        "Higher Risk of Default";
+
+                    risk.className =
+                        "high";
+
+                    icon.innerText =
+                        "⚠️";
+
+                    message.innerText =
+                        "Based on the information provided, " +
+                        "the model estimates a higher likelihood " +
+                        "of credit default.";
+
+                }
+
+
+                // =============================================
+                // LOWER RISK
+                // =============================================
+
+                else {
+
+                    risk.innerText =
+                        "Lower Risk of Default";
+
+                    risk.className =
+                        "low";
+
+                    icon.innerText =
+                        "✅";
+
+                    message.innerText =
+                        "Based on the information provided, " +
+                        "the model estimates a lower likelihood " +
+                        "of credit default.";
+
+                }
+
+
+                // =============================================
+                // XAI
+                // =============================================
+
+                const xaiContainer =
+                    document.getElementById(
+                        "xai-factors"
+                    );
+
+
+                const xaiSummary =
+                    document.getElementById(
+                        "xai-summary"
+                    );
+
+
+                xaiContainer.innerHTML =
+                    "";
+
+
+                // =============================================
+                // OVERALL EXPLANATION
+                // =============================================
+
+                xaiSummary.style.display =
+                    "block";
+
+
+                xaiSummary.innerText =
+                    createOverallSummary(
+                        result.xai,
+                        prediction
+                    );
+
+
+                // =============================================
+                // INDIVIDUAL FACTORS
+                // =============================================
+
+                result.xai.forEach(
+                    function(factor) {
+
+
+                        const explanation =
+                            createExplanation(
+                                factor,
+                                prediction
+                            );
+
+
+                        const div =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        const directionClass =
+                            factor.direction ===
+                            "increases risk"
+                                ? "increase"
+                                : "decrease";
+
+
+                        const icon =
+                            factor.direction ===
+                            "increases risk"
+                                ? "⚠"
+                                : "✓";
+
+
+                        div.className =
+                            "xai-factor " +
+                            directionClass;
+
+
+                        let readableValue =
+                            factor.value;
+
+
+                        // -------------------------------------
+                        // Format numeric values
+                        // -------------------------------------
+
+                        if (
+                            factor.feature.includes(
+                                "Repayment Status"
+                            )
+                        ) {
+
+                            readableValue =
+                                repaymentDescription(
+                                    String(
+                                        factor.value
+                                    )
+                                );
+
+                        }
+
+                        else if (
+                            factor.feature.includes(
+                                "Bill Amount"
+                            ) ||
+                            factor.feature.includes(
+                                "Payment Amount"
+                            ) ||
+                            factor.feature ===
+                                "Credit Limit"
+                        ) {
+
+                            readableValue =
+                                Number(
+                                    factor.value
+                                ).toLocaleString();
+
+                        }
+
+
+                        div.innerHTML = `
+
+                            <div class="xai-feature">
+                                ${icon}
+                                ${explanation.title}
+                            </div>
+
+                            <div class="xai-impact">
+                                ${explanation.message}
+                            </div>
+
+                            <div class="xai-value">
+                                Customer information:
+                                ${readableValue}
+                            </div>
+
+                        `;
+
+
+                        xaiContainer.appendChild(
+                            div
+                        );
+
+                    }
+                );
+
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    "Prediction error:",
+                    error
+                );
+
+
+                alert(
+                    "Prediction failed: " +
+                    error.message
+                );
+
+            }
+
+
+            finally {
+
+                button.disabled =
+                    false;
+
+
+                button.innerText =
+                    "Predict Default Risk";
+
+
+                button.classList.remove(
+                    "loading"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
