@@ -136,5 +136,6 @@ The predictions should not be used as the sole basis for real financial or credi
 
 ```
 
-**This is what I'd actually put on your GitHub.** It gives someone enough information to understand and run the project without turning the README into your project report.
+This is what I'd actually put on your GitHub.
+It gives someone enough information to understand and run the project without turning the README into your project report.
 ```
