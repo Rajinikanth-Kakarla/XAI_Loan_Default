@@ -34,7 +34,7 @@ https://xai-loan-default.onrender.com
 ## 📁 Project Structure
 
 ```text
-credit-default-prediction/
+XAI_Loan_Default/
 │
 ├── app.py
 ├── index.html
@@ -50,8 +50,8 @@ credit-default-prediction/
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd credit-default-prediction
+git clone https://github.com/Rajinikanth-Kakarla/XAI_Loan_Default.git
+cd XAI_Loan_Default
 ```
 
 ### 2. Install dependencies
