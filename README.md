@@ -1,5 +1,7 @@
 # Explainable AI Credit Default Prediction
 
+![Explainable AI Credit Default Prediction](images/loan.png)
+
 An Explainable AI web application that uses an XGBoost machine learning model to predict credit card default risk and provides user-friendly explanations for the prediction using SHAP.
 
 ## 🌐 Live Demo
