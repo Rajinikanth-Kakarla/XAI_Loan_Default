@@ -1,0 +1,42 @@
+                 OFFLINE MODEL TRAINING
+┌───────────────────────────────────────────────────────┐
+│ UCI Dataset                                           │
+│       ↓                                               │
+│ Data Preprocessing                                    │
+│       ↓                                               │
+│ SMOTE / Class Balancing                               │
+│       ↓                                               │
+│ XGBoost Training + Hyperparameter Tuning              │
+│       ↓                                               │
+│ Model Evaluation                                      │
+│       ↓                                               │
+│ xgboost_credit_default_model.pkl                      │
+└───────────────────────┬───────────────────────────────┘
+                        ↓
+                 ONLINE PREDICTION
+                        
+┌──────────────┐    JSON    ┌──────────────┐
+│ User /       │ ─────────→ │ Flask        │
+│ Web Browser  │            │ Backend      │
+└──────────────┘            └──────┬───────┘
+                                   │
+                         ┌─────────┴─────────────┐
+                         ↓                       ↓
+                  ┌─────────────┐        ┌───────────────┐
+                  │   XGBoost   │        │ SHAP          │
+                  │    Model    │        │ TreeExplainer │
+                  └──────┬──────┘        └───────┬───────┘
+                         │                       │
+                         ↓                       ↓
+                  Prediction +            Top 5 Feature
+                  Probability              Contributions
+                         │                       │
+                         └───────────┬───────────┘
+                                     ↓
+                         ┌─────────────────────┐
+                         │ Frontend Results    │
+                         │ • Risk Label        │
+                         │ • Probability       │
+                         │ • Top 5 XAI Factors │
+                         │ • Impact Direction  │
+                         └─────────────────────┘
